@@ -110,7 +110,7 @@ let rec insort l =
 ;;
 
 let rec compose f g =
-    fun x -> f (g x)
+    fun x -> g (f x)
 ;;
 
 let rec merge f g = 
