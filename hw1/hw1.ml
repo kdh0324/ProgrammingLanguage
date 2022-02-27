@@ -151,7 +151,12 @@ let rec lmap f l =
     | head::tail -> [f head] @ (lmap f tail)
 ;;
 
-let rec lrev l = List.fold_left (fun x y -> y::x) [] l;;
+let rec lrev l = 
+    (* List.fold_left (fun x y -> y::x) [] l *)
+    match l with
+    | [] -> []
+    | head::tail -> (lrev tail) @ [head]
+;;
 
 let rec lflat l = 
     (* List.flatten l *)
