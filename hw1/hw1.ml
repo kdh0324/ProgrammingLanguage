@@ -89,24 +89,15 @@ let rec list_add l1 l2 =
 let rec insert n l = 
     match l with
     | [] -> [n]
-    | [i] ->
-        if (i > n) then [n; i]
-        else [i; n]
-    | head::second::list ->
-        if (head <= n && n <= second) then
-            [head; n; second] @ list
-        else
-            [head] @ insert n ([second] @ list)
+    | head::tail ->
+        if (head < n) then head::(insert n tail)
+        else n::l
 ;;
 
 let rec insort l = 
-    List.fold_left (fun x y -> 
-        match x with
-        | head::tail ->
-            if (y > head) then head::y::tail
-            else y::x
-        | [] -> [y]
-    ) [] l
+    match l with
+    | [] -> []
+    | head::tail -> insert head (insort tail)
 ;;
 
 let rec compose f g =
