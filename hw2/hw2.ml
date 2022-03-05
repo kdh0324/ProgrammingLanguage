@@ -54,7 +54,7 @@ let alterSum l =
   in helper l 0 0;;
 
 let ltabulate n f = 
-  if (n < 0) then
+  if n < 0 then
     raise Out_of_boundary
   else
     let rec helper n_ acc =
