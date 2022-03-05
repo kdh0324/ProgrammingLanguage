@@ -172,13 +172,35 @@ module Heap : HEAP =
   struct
     exception InvalidLocation 
 		
-    type loc = unit       (* dummy type, to be chosen by students *) 
-    type 'a heap = unit   (* dummy type, to be chosen by students *)
+    type loc = int       (* dummy type, to be chosen by students *) 
+    type 'a heap = (loc * 'a) list   (* dummy type, to be chosen by students *)
 
-    let empty _ = raise NotImplemented
-    let allocate _ _ = raise NotImplemented
-    let dereference _ _ = raise NotImplemented
-    let update _ _ _ = raise NotImplemented
+    let empty () = [];;
+    let allocate h v = 
+      let len = List.length h in
+      (h @ [(len, v)], len)
+      ;;
+    let dereference h l =
+      let len = List.length h in
+      if len <= l then raise InvalidLocation
+      else 
+        let _, v = List.nth h l in
+        v
+      ;;
+    let update h l v = 
+      let len = List.length h in
+      if len <= l then raise InvalidLocation
+      else
+        let rec splitWithLoc h_ l_ acc =
+          if l_ = 0 then (acc, h_)
+          else
+            match h_ with
+            | [] -> raise InvalidLocation
+            | h__::t -> splitWithLoc t (l_ - 1) (acc @ [h__])
+        in
+        let left, right = splitWithLoc h l [] in
+        left @ [(l, v)] @ right
+      ;;
   end
     
 module DictList : DICT with type key = string =
