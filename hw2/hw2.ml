@@ -208,10 +208,31 @@ module DictList : DICT with type key = string =
     type key = string
     type 'a dict = (key * 'a) list
 			      
-    let empty _ = raise NotImplemented
-    let lookup _ _ = raise NotImplemented
-    let delete _ _ = raise NotImplemented 
-    let insert _ _ = raise NotImplemented
+    let empty () = []
+    let lookup d k = 
+      let rec find =
+        function
+        | [] -> None
+        | (k_, v)::t when k_ = k -> Some v
+        | h::t -> find t
+      in find d
+      ;;
+    let delete d k =
+      let rec find =
+        function
+        | [] -> []
+        | (k_, v)::t when k_ = k -> find t
+        | h::t -> h::(find t)
+      in find d
+      ;;
+    let insert d (k, v) = 
+      let rec find =
+        function
+        | [] -> [(k, v)]
+        | (k_, v_)::t when k_ = k -> (k, v)::t
+        | h::t -> h::(find t)
+      in find d
+    ;;
   end
     
 module DictFun : DICT with type key = string =
