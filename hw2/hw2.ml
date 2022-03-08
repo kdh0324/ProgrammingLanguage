@@ -189,17 +189,13 @@ module Heap : HEAP =
       ;;
     let update h l v = 
       let len = List.length h in
-      if len <= l then raise InvalidLocation
+      if len <= l || h = [] then raise InvalidLocation
       else
-        let rec splitWithLoc h_ l_ acc =
-          if l_ = 0 then (acc, h_)
-          else
-            match h_ with
-            | [] -> raise InvalidLocation
-            | h__::t -> splitWithLoc t (l_ - 1) (acc @ [h__])
-        in
-        let left, right = splitWithLoc h l [] in
-        left @ [(l, v)] @ right
+        let rec helper h_ = 
+          match h_ with
+          | (l_, v_)::t when l_ = l -> (l_, v)::t
+          | (l_, v_)::t when l_ <> l -> (l_, v_)::(helper t)
+        in helper h
       ;;
   end
     
@@ -240,16 +236,16 @@ module DictFun : DICT with type key = string =
     type key = string
     type 'a dict = key -> 'a option
 			     
-    let empty () = function k -> None;;
+    let empty () = fun _ -> None;;
     let lookup d k = d k;;
     let delete d k = 
-      function k_ ->
+      fun k_ ->
         if k_ = k then None
         else d k_
       ;;
     let insert d (k, v) = 
-      function k_ ->
+      fun k_ ->
         if k_ = k then Some v
-        else d k
+        else d k_
       ;;
   end
