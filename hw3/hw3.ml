@@ -44,17 +44,43 @@ module VectorFn (Scal : SCALAR) : VECTOR with type elem = Scal.t
 =
 struct
   type elem = Scal.t
-  type t = unit
+  type t = elem list
 
   exception VectorIllegal
 
-  let create _ = raise NotImplemented
-  let to_list _ = raise NotImplemented
-  let dim _ = raise NotImplemented
-  let nth _ = raise NotImplemented
-  let (++) _ _ = raise NotImplemented
-  let (==) _ _ = raise NotImplemented
-  let innerp _ _ = raise NotImplemented
+  let create v = 
+    if v = [] then raise VectorIllegal
+    else v
+  let to_list v = v
+  let dim v = List.length v
+  let nth v = 
+    fun n -> 
+      if n >= dim v || n < 0 then raise VectorIllegal
+      else List.nth v n
+  let (++) x y = 
+    if dim x <> dim y then raise VectorIllegal
+    else
+      let rec merge v1 v2 =
+        match v1, v2 with
+        | [], [] -> []
+        | h1::t1, h2::t2 -> (Scal.(++) h1 h2)::(merge t1 t2)
+      in merge x y
+  let (==) x y = 
+    if dim x <> dim y then raise VectorIllegal
+    else
+      let rec checkAll v1 v2 =
+        match v1, v2 with
+        | [], [] -> true
+        | h1::t1, h2::t2 -> (Scal.(==) h1 h2) && (checkAll t1 t2)
+      in checkAll x y
+  let innerp x y = 
+    if dim x <> dim y then raise VectorIllegal
+    else
+      let rec prod v1 v2 =
+        match v1, v2 with
+        | [], [] -> Scal.zero
+        | h1::t1, h2::t2 -> Scal.(++) (Scal.( ** ) h1 h2) (prod t1 t2)
+      in prod x y
 end
 
 (* Problem 1-3 *)
