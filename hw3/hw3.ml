@@ -90,20 +90,88 @@ module MatrixFn (Scal : SCALAR) : MATRIX with type elem = Scal.t
 =
 struct
   type elem = Scal.t
-  type t = unit
+  type t = (elem list) list
 
   exception MatrixIllegal
 
-  let create _ = raise NotImplemented
-  let identity _ = raise NotImplemented
-  let dim _ = raise NotImplemented
-  let transpose _ = raise NotImplemented
-  let to_list _ = raise NotImplemented
-  let get _ _ _ = raise NotImplemented 
-
-  let (++) _ _ = raise NotImplemented
-  let ( ** ) _ _ = raise NotImplemented
-  let (==) _ _ = raise NotImplemented
+  let create m = 
+    match m with
+    | [] -> raise MatrixIllegal
+    | h::t ->
+      let len = List.length h in
+      let check a = List.length a = len in
+      if List.for_all check t then m
+      else raise MatrixIllegal
+  let identity d = 
+    if d <= 0 then raise MatrixIllegal
+    else 
+      let rec makeMatrix n =
+        if n = d then []
+        else
+          let rec makeRow n_ =
+            if n_ = d then []
+            else
+              if n_ = n then Scal.one::makeRow (n_ + 1)
+              else Scal.zero::makeRow (n_ + 1)
+          in
+          (makeRow 0)::makeMatrix (n + 1)
+      in makeMatrix 0
+  let dim m = List.length m
+  let transpose m = 
+    let d = dim m in
+    let rec makeMatrix i =
+      if i = d then []
+      else
+        let rec makeRow j =
+          if j = d then []
+          else (List.nth (List.nth m j) i)::makeRow (j + 1)
+        in
+        (makeRow 0)::makeMatrix (i + 1)
+    in makeMatrix 0
+  let to_list m = m
+  let get m r c = 
+    let d = dim m in
+    if r >= d || c >= d then raise MatrixIllegal
+    else List.nth (List.nth m r) c
+  let (++) x y = 
+    if dim x <> dim y then raise MatrixIllegal
+    else
+      let rec calRow r1 r2 =
+        match r1, r2 with
+        | [], [] -> []
+        | h1::t1, h2::t2 -> (Scal.(++) h1 h2)::(calRow t1 t2)
+      in
+      let rec calMat m1 m2 =
+        match m1, m2 with
+        | [], [] -> []
+        | h1::t1, h2::t2 -> (calRow h1 h2)::(calMat t1 t2)
+      in calMat x y
+  let ( ** ) x y = 
+    if dim x <> dim y then raise MatrixIllegal
+    else
+      let rec calRow r1 r2 =
+        match r1, r2 with
+        | [], [] -> []
+        | h1::t1, h2::t2 -> (Scal.( ** ) h1 h2)::(calRow t1 t2)
+      in
+      let rec calMat m1 m2 =
+        match m1, m2 with
+        | [], [] -> []
+        | h1::t1, h2::t2 -> (calRow h1 h2)::(calMat t1 t2)
+      in calMat x y
+  let (==) x y =
+    if dim x <> dim y then raise MatrixIllegal
+    else
+      let rec calRow r1 r2 =
+        match r1, r2 with
+        | [], [] -> true
+        | h1::t1, h2::t2 -> (Scal.(==) h1 h2) && (calRow t1 t2)
+      in
+      let rec calMat m1 m2 =
+        match m1, m2 with
+        | [], [] -> true
+        | h1::t1, h2::t2 -> (calRow h1 h2) && (calMat t1 t2)
+      in calMat x y
 end
 
 (* Problem 2-1 *)
