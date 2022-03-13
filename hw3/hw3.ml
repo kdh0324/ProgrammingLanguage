@@ -55,24 +55,14 @@ struct
   let dim v = List.length v
   let nth v = 
     fun n -> 
-      if n >= dim v || n < 0 then raise VectorIllegal
-      else List.nth v n
+      try List.nth v n with
+        _ -> raise VectorIllegal
   let (++) x y = 
     if dim x <> dim y then raise VectorIllegal
-    else
-      let rec merge v1 v2 =
-        match v1, v2 with
-        | [], [] -> []
-        | h1::t1, h2::t2 -> (Scal.(++) h1 h2)::(merge t1 t2)
-      in merge x y
+    else List.map2 (fun e1 e2 -> Scal.(++) e1 e2) x y
   let (==) x y = 
     if dim x <> dim y then raise VectorIllegal
-    else
-      let rec checkAll v1 v2 =
-        match v1, v2 with
-        | [], [] -> true
-        | h1::t1, h2::t2 -> (Scal.(==) h1 h2) && (checkAll t1 t2)
-      in checkAll x y
+    else List.for_all2 (fun e1 e2 -> Scal.(==) e1 e2) x y
   let innerp x y = 
     if dim x <> dim y then raise VectorIllegal
     else
@@ -89,8 +79,10 @@ end
 module MatrixFn (Scal : SCALAR) : MATRIX with type elem = Scal.t
 =
 struct
-  type elem = Scal.t
-  type t = (elem list) list
+  module Vec = VectorFn (Scal)
+
+  type elem = Vec.elem
+  type t = Vec.t list
 
   exception MatrixIllegal
 
@@ -100,7 +92,7 @@ struct
     | h::t ->
       let len = List.length h in
       let check a = List.length a = len in
-      if List.for_all check t then m
+      if List.for_all check t then List.map (fun r -> Vec.create r) m
       else raise MatrixIllegal
   let identity d = 
     if d <= 0 then raise MatrixIllegal
@@ -114,7 +106,7 @@ struct
               if n_ = n then Scal.one::makeRow (n_ + 1)
               else Scal.zero::makeRow (n_ + 1)
           in
-          (makeRow 0)::makeMatrix (n + 1)
+          (Vec.create (makeRow 0))::makeMatrix (n + 1)
       in makeMatrix 0
   let dim m = List.length m
   let transpose m = 
@@ -124,54 +116,26 @@ struct
       else
         let rec makeRow j =
           if j = d then []
-          else (List.nth (List.nth m j) i)::makeRow (j + 1)
+          else (Vec.nth (List.nth m j) i)::makeRow (j + 1)
         in
-        (makeRow 0)::makeMatrix (i + 1)
+        (Vec.create (makeRow 0))::makeMatrix (i + 1)
     in makeMatrix 0
-  let to_list m = m
+  let to_list m = List.map (fun r -> Vec.to_list r) m
   let get m r c = 
-    let d = dim m in
-    if r >= d || c >= d then raise MatrixIllegal
-    else List.nth (List.nth m r) c
+    try Vec.nth (List.nth m r) c with
+      _ -> raise MatrixIllegal
   let (++) x y = 
     if dim x <> dim y then raise MatrixIllegal
-    else
-      let rec calRow r1 r2 =
-        match r1, r2 with
-        | [], [] -> []
-        | h1::t1, h2::t2 -> (Scal.(++) h1 h2)::(calRow t1 t2)
-      in
-      let rec calMat m1 m2 =
-        match m1, m2 with
-        | [], [] -> []
-        | h1::t1, h2::t2 -> (calRow h1 h2)::(calMat t1 t2)
-      in calMat x y
+    else List.map2 (fun r1 r2 -> Vec.(++) r1 r2) x y
   let ( ** ) x y = 
     if dim x <> dim y then raise MatrixIllegal
-    else
-      let rec calRow r1 r2 =
-        match r1, r2 with
-        | [], [] -> []
-        | h1::t1, h2::t2 -> (Scal.( ** ) h1 h2)::(calRow t1 t2)
-      in
-      let rec calMat m1 m2 =
-        match m1, m2 with
-        | [], [] -> []
-        | h1::t1, h2::t2 -> (calRow h1 h2)::(calMat t1 t2)
-      in calMat x y
+    else 
+      let transpose_y = transpose y in
+      List.map (fun r -> 
+        Vec.create (List.map (fun r_ -> Vec.innerp r r_) transpose_y)) x
   let (==) x y =
     if dim x <> dim y then raise MatrixIllegal
-    else
-      let rec calRow r1 r2 =
-        match r1, r2 with
-        | [], [] -> true
-        | h1::t1, h2::t2 -> (Scal.(==) h1 h2) && (calRow t1 t2)
-      in
-      let rec calMat m1 m2 =
-        match m1, m2 with
-        | [], [] -> true
-        | h1::t1, h2::t2 -> (calRow h1 h2) && (calMat t1 t2)
-      in calMat x y
+    else List.for_all2 (fun r1 r2 -> Vec.(==) r1 r2) x y
 end
 
 (* Problem 2-1 *)
@@ -287,4 +251,3 @@ let _ =
   else
     print_endline "\nYour program might have bugs!"
   with _ -> print_endline "\nYour program is not complete yet!" 
-
