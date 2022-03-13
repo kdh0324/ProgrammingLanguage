@@ -89,10 +89,10 @@ struct
   let create m = 
     match m with
     | [] -> raise MatrixIllegal
-    | h::t ->
-      let len = List.length h in
+    | _ ->
+      let len = List.length m in
       let check a = List.length a = len in
-      if List.for_all check t then List.map (fun r -> Vec.create r) m
+      if List.for_all check m then List.map (fun r -> Vec.create r) m
       else raise MatrixIllegal
   let identity d = 
     if d <= 0 then raise MatrixIllegal
@@ -162,7 +162,9 @@ end
 module BoolMat = MatrixFn (Boolean)
 module BoolMatClosure = ClosureFn (BoolMat)
 
-let reach g = BoolMat.to_list (BoolMatClosure.closure (BoolMat.create g))
+let reach g = 
+  try BoolMat.to_list (BoolMatClosure.closure (BoolMat.create g)) with
+  _ -> raise IllegalFormat
 
 let al = 
   [[true;  false; false; false; false; false];
@@ -206,7 +208,9 @@ end
 module DisMat = MatrixFn (Distance)
 module DisMatClosure = ClosureFn (DisMat)
 
-let distance g = DisMat.to_list (DisMatClosure.closure (DisMat.create g))
+let distance g = 
+  try DisMat.to_list (DisMatClosure.closure (DisMat.create g)) with
+  _ -> raise IllegalFormat
 
 let dl =
   [[  0;  -1;  -1;  -1;  -1;  -1 ];
@@ -231,17 +235,29 @@ struct
 
   exception ScalarIllegal
 
-  let zero = 999999              (* Dummy value : Rewrite it! *)
-  let one = 999999               (* Dummy value : Rewrite it! *)
- 
-  let (++) _ _ = raise NotImplemented
-  let ( ** ) _ _ = raise NotImplemented
-  let (==) _ _ = raise NotImplemented
+  let zero = 0              (* Dummy value : Rewrite it! *)
+  let one = -1               (* Dummy value : Rewrite it! *)
+
+  let (++) x y = 
+    if x = one || y = one then one
+    else if x > y then x
+    else y
+  let ( ** ) x y = 
+    if x = one then y
+    else if y = one then x
+    else if x > y then y
+    else x
+  let (==) x y = x = y
 end
 
 (* .. Write some code here .. *)
 
-let weight _ = raise NotImplemented
+module WeightMat = MatrixFn (Weight)
+module WeightMatClosure = ClosureFn (WeightMat)
+
+let weight g = 
+  try WeightMat.to_list (WeightMatClosure.closure (WeightMat.create g)) with
+  _ -> raise IllegalFormat
 
 let ml =
   [[-1; 0  ; 0  ; 0  ; 0  ; 0   ];
