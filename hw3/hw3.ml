@@ -151,7 +151,7 @@ struct
     let i = Mat.identity (Mat.dim m) in
     let rec get_closure curr =
       let next = Mat.(++) i (Mat.( ** ) m curr) in
-      if next = curr then curr
+      if Mat.(==) curr next then curr
       else get_closure next
     in get_closure i
 end
@@ -187,17 +187,26 @@ struct
 
   exception ScalarIllegal
 
-  let zero = 999999              (* Dummy value : Rewrite it! *)
-  let one = 999999               (* Dummy value : Rewrite it! *)
+  let zero = -1              (* Dummy value : Rewrite it! *)
+  let one = 0               (* Dummy value : Rewrite it! *)
 
-  let (++) _ _ = raise NotImplemented
-  let ( ** ) _ _ = raise NotImplemented
-  let (==) _ _ = raise NotImplemented
+  let (++) x y = 
+    if x = zero then y
+    else if y = zero then x
+    else if x < y then x
+    else y
+  let ( ** ) x y = 
+    if x = zero || y = zero then zero
+    else x + y
+  let (==) x y = x = y
 end
 
 (* .. Write some code here .. *)
 
-let distance _ = raise NotImplemented
+module DisMat = MatrixFn (Distance)
+module DisMatClosure = ClosureFn (DisMat)
+
+let distance g = DisMat.to_list (DisMatClosure.closure (DisMat.create g))
 
 let dl =
   [[  0;  -1;  -1;  -1;  -1;  -1 ];
