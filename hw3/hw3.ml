@@ -162,7 +162,7 @@ end
 module BoolMat = MatrixFn (Boolean)
 module BoolMatClosure = ClosureFn (BoolMat)
 
-let reach _ = raise NotImplemented
+let reach g = BoolMat.to_list (BoolMatClosure.closure (BoolMat.create g))
 
 let al = 
   [[true;  false; false; false; false; false];
