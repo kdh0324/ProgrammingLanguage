@@ -2,3 +2,5 @@
 */*.cmo
 
 .DS_Store
+
+*.sh
