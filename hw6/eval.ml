@@ -30,8 +30,63 @@ let value2exp _ = raise NotImplemented
 
 (* Problem 1. 
  * texp2exp : Tml.texp -> Tml.exp *)
-let texp2exp _ = raise NotImplemented
-
+let texp2exp texp = 
+  let rec find l v =
+    match l with
+      [] -> 0
+    | h::t ->
+      if h = v then 0
+      else (find t v) + 1
+    in
+  let rec helper te s = 
+    match te with
+      Tvar v -> 
+        if List.mem v s then (Ind(find s v), s)
+        else (Ind(find (s @ [v]) v), (s @ [v]))
+    | Tlam (v, tp, te') -> (Lam(fst (helper te' (v::s))), s)
+    | Tapp (te1, te2) -> 
+      let result2 = helper te2 s in
+      let result1 = helper te1 (snd result2) in
+      (App(fst result1, fst result2), snd result1)
+    | Tpair (te1, te2) -> 
+      let result2 = helper te2 s in
+      let result1 = helper te1 (snd result2) in
+      (Pair(fst result1, fst result2), snd result1)
+    | Tfst te' -> 
+      let result = helper te' s in
+      (Fst(fst result), snd result)
+    | Tsnd te' -> 
+      let result = helper te' s in
+      (Snd(fst result), snd result)
+    | Teunit -> (Eunit, s)
+    | Tinl (te', tp) -> 
+      let result = helper te' s in
+      (Inl(fst result), snd result)
+    | Tinr (te', tp) -> 
+      let result = helper te' s in
+      (Inr(fst result), snd result)
+    | Tcase (te', v1, te1, v2, te2) -> 
+      let result' = helper te' s in
+      let result2 = helper te2 (snd result') in
+      let result1 = helper te1 (snd result2) in
+      (Case(fst result', fst result1, fst result2), snd result1)
+    | Tfix (v, tp, te') -> 
+      let result = helper te' (v::s) in
+      (Fix(fst result), snd result)
+    | Ttrue -> (True, s)
+    | Tfalse -> (False, s)
+    | Tifthenelse (te', te1, te2) -> 
+      let result' = helper te' s in
+      let result2 = helper te2 (snd result') in
+      let result1 = helper te1 (snd result2) in
+      (Ifthenelse(fst result', fst result1, fst result2), snd result1)
+    | Tnum v -> (Num(v), s)
+    | Tplus -> (Plus, s)
+    | Tminus -> (Minus, s)
+    | Teq -> (Eq, s)
+  in 
+  let result = helper texp [] in
+  fst result
 (* Problem 2. 
  * step1 : Tml.exp -> Tml.exp *)   
 let rec step1 _ = raise NotImplemented
