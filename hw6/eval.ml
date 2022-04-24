@@ -126,13 +126,6 @@ let rec step1 e =
     | Ifthenelse (e', e11, e12) -> Ifthenelse(subs n e' e2, subs n e11 e2, subs n e12 e2)
     | _ -> e1
 		in
-	let rec isValue e =
-		match e with
-		  Pair (e1, e2) -> (isValue e1) && (isValue e2)
-		| Inl e' | Inr e' -> isValue e'
-		| Fix _ | Ifthenelse (_, _, _) | Case (_, _, _) | Fst _ | Snd _ | App (_, _) -> false
-		| _ -> true
-		in
   match e with
     App (Plus, Pair (Num n1, Num n2)) -> Num(n1 + n2)
   | App (Minus, Pair (Num n1, Num n2)) -> 
@@ -141,13 +134,9 @@ let rec step1 e =
   | App (Eq, Pair (Num n1, Num n2)) -> 
     if n1 = n2 then True
     else False
-  | App (Lam e1, e2) when isValue e2 -> subs 0 e1 e2
-  | App (e1, e2) -> 
-		if isValue e1 then App(e1, step1 e2)
-		else App(step1 e1, e2)
-  | Pair (e1, e2) -> 
-		if isValue e1 then Pair(e1, step1 e2)
-		else Pair(step1 e1, e2)
+  | App (Lam e1, e2) -> (try App(Lam e1, step1 e2) with Stuck -> subs 0 e1 e2)
+  | App (e1, e2) -> (try App(step1 e1, e2) with Stuck -> App(e1, step1 e2))
+  | Pair (e1, e2) -> (try Pair(step1 e1, e2) with Stuck -> Pair(e1, step1 e2))
   | Fst (Pair(e1, e2)) -> e1
 	| Fst e' -> Fst(step1 e')
   | Snd (Pair(e1, e2)) -> e2
