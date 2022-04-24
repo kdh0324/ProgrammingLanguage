@@ -43,7 +43,9 @@ let texp2exp texp =
       Tvar v -> 
         if List.mem v s then (Ind(find s v), s)
         else (Ind(find (s @ [v]) v), (s @ [v]))
-    | Tlam (v, tp, te') -> (Lam(fst (helper te' (v::s))), s)
+    | Tlam (v, tp, te') ->
+			let result = helper te' (v::s) in
+			(Lam(fst result), List.tl (snd result))
     | Tapp (te1, te2) -> 
       let result2 = helper te2 s in
       let result1 = helper te1 (snd result2) in
@@ -66,30 +68,87 @@ let texp2exp texp =
       let result = helper te' s in
       (Inr(fst result), snd result)
     | Tcase (te', v1, te1, v2, te2) -> 
-      let result' = helper te' s in
-      let result2 = helper te2 (snd result') in
-      let result1 = helper te1 (snd result2) in
-      (Case(fst result', fst result1, fst result2), snd result1)
+      let result2 = helper te2 (v2::s) in
+      let result1 = helper te1 (v1::List. tl (snd result2)) in
+      let result' = helper te' (List.tl (snd result1)) in
+      (Case(fst result', fst result1, fst result2), snd result')
     | Tfix (v, tp, te') -> 
       let result = helper te' (v::s) in
-      (Fix(fst result), snd result)
+      (Fix(fst result), List.tl (snd result))
     | Ttrue -> (True, s)
     | Tfalse -> (False, s)
     | Tifthenelse (te', te1, te2) -> 
-      let result' = helper te' s in
-      let result2 = helper te2 (snd result') in
+      let result2 = helper te2 s in
       let result1 = helper te1 (snd result2) in
-      (Ifthenelse(fst result', fst result1, fst result2), snd result1)
+      let result' = helper te' (snd result1) in
+      (Ifthenelse(fst result', fst result1, fst result2), snd result')
     | Tnum v -> (Num(v), s)
     | Tplus -> (Plus, s)
     | Tminus -> (Minus, s)
     | Teq -> (Eq, s)
   in 
-  let result = helper texp [] in
-  fst result
+  let e, _ = helper texp [] in e
 (* Problem 2. 
  * step1 : Tml.exp -> Tml.exp *)   
-let rec step1 _ = raise NotImplemented
+let rec step1 e = 
+  let rec shift i n e' =
+    match e' with
+      App (e1, e2) -> App(shift i n e1, shift i n e2)
+    | Lam e'' -> Lam(shift (i + 1) n e'')
+    | Ind m ->
+      if m >= i then Ind(m + n)
+      else Ind(m)
+    | Pair (e1, e2) -> Pair(shift i n e1, shift i n e2)
+    | Fst e'' -> Fst(shift i n e'')
+    | Snd e'' -> Snd(shift i n e'')
+    | Inl e'' -> Inl(shift i n e'')
+    | Inr e'' -> Inr(shift i n e'')
+    | Fix e'' -> Fix(shift i (n + 1) e'')
+    | Case (e'', e1, e2) -> Case(shift i n e'', shift i (n + 1) e1, shift i (n + 1) e2)
+    | Ifthenelse (e'', e1, e2) -> Ifthenelse(shift i n e'', shift i n e1, shift i n e2)
+    | _ -> e'
+    in
+  let rec subs n e1 e2 =
+    match e1 with
+      App (e11, e12) -> App(subs n e11 e2, subs n e12 e2)
+    | Lam e' -> Lam(subs (n + 1) e' e2)
+    | Ind m ->
+      if m < n then Ind(m)
+      else if m > n then Ind(m - 1)
+      else shift 0 n e2
+    | Pair (e11, e12) -> Pair(subs n e11 e2, subs n e12 e2)
+    | Fst e' -> Fst(subs n e' e2)
+    | Snd e' -> Snd(subs n e' e2)
+    | Inl e' -> Inl(subs n e' e2)
+    | Inr e' -> Inr(subs n e' e2)
+    | Fix e' -> Fix(subs (n + 1) e' e2)
+    | Case (e', e11, e12) -> Case(subs n e' e2, subs (n + 1) e11 e2, subs (n + 1) e12 e2)
+    | Ifthenelse (e', e11, e12) -> Ifthenelse(subs n e' e2, subs n e11 e2, subs n e12 e2)
+    | _ -> e1
+    in
+  match e with
+    App (Plus, App (Num n1, Num n2)) -> Num(n1 + n2)
+  | App (Minus, App (Num n1, Num n2)) -> 
+    if n1 >= n2 then Num(n1 - n2)
+    else Num(0)
+  | App (Eq, App (Num n1, Num n2)) -> 
+    if n1 = n2 then True
+    else False
+  | App (Lam e1, e2) -> (try App(Lam(e1), step1 e2) with Stuck -> subs 0 e1 e2)
+  | App (e1, e2) -> App(step1 e1, e2)
+  | Pair (e1, e2) -> Pair(step1 e1, step1 e2)
+  | Fst e' -> Fst(step1 e')
+  | Snd e' -> Snd(step1 e')
+  | Inl e' -> Inl(step1 e')
+  | Inr e' -> Inr(step1 e')
+  | Case (Inl (e'), e1, e2) -> e1
+  | Case (Inr (e'), e1, e2) -> e2
+  | Case (e', e1, e2) -> Case(step1 e', e1, e2)
+  | Fix e' -> subs 0 (Fix e') e'
+  | Ifthenelse (True, e1, e2) -> e1
+  | Ifthenelse (False, e1, e2) -> e2
+  | Ifthenelse (e', e1, e2) -> Ifthenelse(step1 e', e1, e2)
+  | _ -> raise Stuck
 
 (* Problem 3. 
  * step2 : state -> state *)
