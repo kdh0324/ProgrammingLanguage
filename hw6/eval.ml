@@ -103,8 +103,8 @@ let rec step1 e =
     | Snd e'' -> Snd(shift i n e'')
     | Inl e'' -> Inl(shift i n e'')
     | Inr e'' -> Inr(shift i n e'')
-    | Fix e'' -> Fix(shift i (n + 1) e'')
-    | Case (e'', e1, e2) -> Case(shift i n e'', shift i (n + 1) e1, shift i (n + 1) e2)
+    | Fix e'' -> Fix(shift (i + 1) n e'')
+    | Case (e'', e1, e2) -> Case(shift i n e'', shift (i + 1) n e1, shift (i + 1) n e2)
     | Ifthenelse (e'', e1, e2) -> Ifthenelse(shift i n e'', shift i n e1, shift i n e2)
     | _ -> e'
     in
@@ -125,26 +125,39 @@ let rec step1 e =
     | Case (e', e11, e12) -> Case(subs n e' e2, subs (n + 1) e11 e2, subs (n + 1) e12 e2)
     | Ifthenelse (e', e11, e12) -> Ifthenelse(subs n e' e2, subs n e11 e2, subs n e12 e2)
     | _ -> e1
-    in
+		in
+	let rec isValue e =
+		match e with
+		  Pair (e1, e2) -> (isValue e1) && (isValue e2)
+		| Inl e' | Inr e' -> isValue e'
+		| Fix _ | Ifthenelse (_, _, _) | Case (_, _, _) | Fst _ | Snd _ | App (_, _) -> false
+		| _ -> true
+		in
   match e with
-    App (Plus, App (Num n1, Num n2)) -> Num(n1 + n2)
-  | App (Minus, App (Num n1, Num n2)) -> 
+    App (Plus, Pair (Num n1, Num n2)) -> Num(n1 + n2)
+  | App (Minus, Pair (Num n1, Num n2)) -> 
     if n1 >= n2 then Num(n1 - n2)
     else Num(0)
-  | App (Eq, App (Num n1, Num n2)) -> 
+  | App (Eq, Pair (Num n1, Num n2)) -> 
     if n1 = n2 then True
     else False
-  | App (Lam e1, e2) -> (try App(Lam(e1), step1 e2) with Stuck -> subs 0 e1 e2)
-  | App (e1, e2) -> App(step1 e1, e2)
-  | Pair (e1, e2) -> Pair(step1 e1, step1 e2)
-  | Fst e' -> Fst(step1 e')
-  | Snd e' -> Snd(step1 e')
+  | App (Lam e1, e2) when isValue e2 -> subs 0 e1 e2
+  | App (e1, e2) -> 
+		if isValue e1 then App(e1, step1 e2)
+		else App(step1 e1, e2)
+  | Pair (e1, e2) -> 
+		if isValue e1 then Pair(e1, step1 e2)
+		else Pair(step1 e1, e2)
+  | Fst (Pair(e1, e2)) -> e1
+	| Fst e' -> Fst(step1 e')
+  | Snd (Pair(e1, e2)) -> e2
+	| Snd e' -> Snd(step1 e')
   | Inl e' -> Inl(step1 e')
   | Inr e' -> Inr(step1 e')
-  | Case (Inl (e'), e1, e2) -> e1
-  | Case (Inr (e'), e1, e2) -> e2
+  | Case (Inl (e'), e1, e2) -> subs 0 e1 e'
+  | Case (Inr (e'), e1, e2) -> subs 0 e2 e'
   | Case (e', e1, e2) -> Case(step1 e', e1, e2)
-  | Fix e' -> subs 0 (Fix e') e'
+  | Fix e' -> subs 0 e' (Fix e')
   | Ifthenelse (True, e1, e2) -> e1
   | Ifthenelse (False, e1, e2) -> e2
   | Ifthenelse (e', e1, e2) -> Ifthenelse(step1 e', e1, e2)
