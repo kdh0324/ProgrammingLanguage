@@ -38,15 +38,15 @@ type stoval =
 	| Snd_F
 	| Case_F of exp * exp * env
 	| Ifthenelse_F of exp * exp * env
-	| Plus_F
-	| Plus_Fst_F of exp * env
-	| Plus_Snd_F of value
-	| Minus_F
-	| Minus_Fst_F of exp * env
-	| Minus_Snd_F of value
-	| Eq_F
-	| Eq_Fst_F of exp * env
-	| Eq_Snd_F of value
+	| Plus_Fst_F
+	| Plus_Snd_F of exp * env
+	| Plus_Cal_F of value
+	| Minus_Fst_F
+	| Minus_Snd_F of exp * env
+	| Minus_Cal_F of value
+	| Eq_Fst_F
+	| Eq_Snd_F of exp * env
+	| Eq_Cal_F of value
 	| L_F of Heap.loc
 
 (* Define your own empty environment *)
@@ -224,9 +224,9 @@ let step2 st =
 			Hole_SK -> raise Stuck
 		| Frame_SK (sk, f) -> 
 			match f, v with
-			  App_F (e, env), Plus_V -> Anal_ST(h, Frame_SK(sk, Plus_F), e, env)
-			|	App_F (e, env), Minus_V -> Anal_ST(h, Frame_SK(sk, Minus_F), e, env)
-			|	App_F (e, env), Eq_V -> Anal_ST(h, Frame_SK(sk, Eq_F), e, env)
+			  App_F (e, env), Plus_V -> Anal_ST(h, Frame_SK(sk, Plus_Fst_F), e, env)
+			|	App_F (e, env), Minus_V -> Anal_ST(h, Frame_SK(sk, Minus_Fst_F), e, env)
+			|	App_F (e, env), Eq_V -> Anal_ST(h, Frame_SK(sk, Eq_Fst_F), e, env)
 			| App_F (e, env), Lam_V (e', env') -> 
 				let h', l = Heap.allocate h (Delayed(e, env)) in
 				Anal_ST(h', sk, e', newEnv env' l)
@@ -240,15 +240,15 @@ let step2 st =
 				Anal_ST(h', sk, e2, newEnv env l)
 			| Ifthenelse_F (e1, e2, env), True_V -> Anal_ST(h, sk, e1, env)
 			| Ifthenelse_F (e1, e2, env), False_V -> Anal_ST(h, sk, e2, env)
-			| Plus_F, Pair_V(e1, e2, env) -> Anal_ST(h, Frame_SK(sk, Plus_Fst_F(e2, env)), e1, env)
-			| Plus_Fst_F (e, env), Num_V n -> Anal_ST(h, Frame_SK(sk, Plus_Snd_F v), e, env)
-			| Plus_Snd_F (Num_V n1), Num_V n2 -> Return_ST(h, sk, Num_V(n1 + n2))
-			| Minus_F, Pair_V(e1, e2, env) -> Anal_ST(h, Frame_SK(sk, Minus_Fst_F(e2, env)), e1, env)
-			| Minus_Fst_F (e, env), Num_V n -> Anal_ST(h, Frame_SK(sk, Minus_Snd_F v), e, env)
-			| Minus_Snd_F (Num_V n1), Num_V n2 -> Return_ST(h, sk, Num_V(n1 - n2))
-			| Eq_F, Pair_V(e1, e2, env) -> Anal_ST(h, Frame_SK(sk, Eq_Fst_F(e2, env)), e1, env)
-			| Eq_Fst_F (e, env), Num_V n -> Anal_ST(h, Frame_SK(sk, Eq_Snd_F v), e, env)
-			| Eq_Snd_F (Num_V n1), Num_V n2 -> 
+			| Plus_Fst_F, Pair_V(e1, e2, env) -> Anal_ST(h, Frame_SK(sk, Plus_Snd_F(e2, env)), e1, env)
+			| Plus_Snd_F (e, env), Num_V n -> Anal_ST(h, Frame_SK(sk, Plus_Cal_F v), e, env)
+			| Plus_Cal_F (Num_V n1), Num_V n2 -> Return_ST(h, sk, Num_V(n1 + n2))
+			| Minus_Fst_F, Pair_V(e1, e2, env) -> Anal_ST(h, Frame_SK(sk, Minus_Snd_F(e2, env)), e1, env)
+			| Minus_Snd_F (e, env), Num_V n -> Anal_ST(h, Frame_SK(sk, Minus_Cal_F v), e, env)
+			| Minus_Cal_F (Num_V n1), Num_V n2 -> Return_ST(h, sk, Num_V(n1 - n2))
+			| Eq_Fst_F, Pair_V(e1, e2, env) -> Anal_ST(h, Frame_SK(sk, Eq_Snd_F(e2, env)), e1, env)
+			| Eq_Snd_F (e, env), Num_V n -> Anal_ST(h, Frame_SK(sk, Eq_Cal_F v), e, env)
+			| Eq_Cal_F (Num_V n1), Num_V n2 -> 
 				let bv = if n1 = n2 then True_V else False_V in
 				Return_ST(h, sk, bv)
 			| L_F l, _ -> Return_ST(Heap.update h l (Computed v), sk, v)
