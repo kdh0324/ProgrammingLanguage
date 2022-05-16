@@ -1,0 +1,67 @@
+Machine code:
+Function 2:
+6:
+7:
+9:
+10:
+	call *(TR + 0)
+	push AX
+	call *(TR + 0)
+	push AX
+	move AX <- *(SP + -1)
+	pop R[28]
+	pop R[28]
+	return
+Function 2:
+5:
+	malloc TR <- 2
+	move (TR + 0) <- &Function 2
+	push TR
+	move AX <- *(BP + 0)
+	pop R[28]
+	pop R[28]
+	pop R[28]
+	return
+Function 2:
+4:
+	malloc TR <- 2
+	move (TR + 0) <- &Function 2
+	push TR
+	move AX <- *(BP + 0)
+	pop R[28]
+	pop R[28]
+	pop R[28]
+	pop R[28]
+	return
+_Start_CSE_321_HW7_:
+	malloc TR <- 2
+	move (TR + 0) <- &Function 2
+	push TR
+	halt *(BP + 0)
+
+
+Execution begins at 34:
+34   _Start_CSE_321_HW7_:
+35   	malloc TR <- 2
+36   	move (TR + 0) <- &Function 2
+37   	push TR
+38   	halt *(BP + 0)
+
+Stack(1) = [0] = &Heap_0/
+
+&Heap_0 = [0] = &Function 2 [1] = 0
+
+Execution statistics
+	code size = 29
+	max stack = 0
+	max heap = 2
+	instructions executed = 4
+	memory read = 1
+	memory write = 2
+	register read = 4
+	register write = 2
+Total time cost = 80
+Total memory cost = 31
+
+Normal termination
+	Result = HEAP_&0: [|LABEL_Function 2||0|]

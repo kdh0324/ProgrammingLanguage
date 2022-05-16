@@ -1,0 +1,63 @@
+Machine code:
+_Function_9_:
+	// MLIST
+2:
+	jmpneq &_Temp_3_, (*(TR + 1), 0)
+	move TR <- 0
+	return
+	// MLIST
+_Temp_3_:
+	// APP
+	// APP_ARITH
+	sub R[29] <- (*(&Heap_0 + 1), 1)
+	push R[29]
+	move TR <- *(SP + -2)
+	move (TR + 1) <- *(SP + -1)
+	call *(TR + 0)
+	push TR
+	move TR <- *(SP + -1)
+	pop R[29]
+	pop R[29]
+	return
+	// MLIST
+_Start_CSE_321_HW7_:
+	// REC
+	// FUN
+	malloc TR <- 2
+	move (TR + 0) <- &_Function_9_
+	push TR
+	// APP
+	move TR <- *(SP + -1)
+	move (TR + 1) <- 6
+	call *(TR + 0)
+	push TR
+	move AX <- *(SP + -1)
+	pop R[29]
+	pop R[29]
+	halt AX
+
+
+Execution begins at 21:
+21   _Start_CSE_321_HW7_:
+22   	// REC
+23   	// FUN
+24   	malloc TR <- 2
+25   	move (TR + 0) <- &_Function_9_
+26   	push TR
+27   	// APP
+28   	move TR <- *(SP + -1)
+29   	move (TR + 1) <- 6
+30   	call *(TR + 0)
+0   _Function_9_:
+1   	// MLIST
+2   2:
+3   	jmpneq &_Temp_3_, (*(TR + 1), 0)
+7   _Temp_3_:
+8   	// APP
+9   	// APP_ARITH
+10   	sub R[29] <- (*(&Heap_0 + 1), 1)
+11   	push R[29]
+12   	move TR <- *(SP + -2)
+13   	move (TR + 1) <- *(SP + -1)
+
+Abnormal execution

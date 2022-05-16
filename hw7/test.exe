@@ -1,0 +1,47 @@
+Machine code:
+Function 2:
+4:
+Update Variable:
+	move AX <- R[29]
+	return
+_Start_CSE_321_HW7_:
+	malloc TR <- 2
+	move (TR + 0) <- &Function 2
+	push TR
+	move R[29] <- 1
+	call *(TR + 0)
+	halt AX
+
+
+Execution begins at 5:
+5   _Start_CSE_321_HW7_:
+6   	malloc TR <- 2
+7   	move (TR + 0) <- &Function 2
+8   	push TR
+9   	move R[29] <- 1
+10   	call *(TR + 0)
+0   Function 2:
+1   4:
+2   Update Variable:
+3   	move AX <- R[29]
+4   	return
+11   	halt AX
+
+Stack(1) = [0] = &Heap_0/
+
+&Heap_0 = [0] = &Function 2 [1] = 0
+
+Execution statistics
+	code size = 8
+	max stack = 2
+	max heap = 2
+	instructions executed = 8
+	memory read = 3
+	memory write = 4
+	register read = 7
+	register write = 8
+Total time cost = 173
+Total memory cost = 12
+
+Normal termination
+	Result = 1

@@ -1,0 +1,729 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.81
+# Copyright (C) 2006  Free Software Foundation, Inc.
+# This is free software; see the source for copying conditions.
+# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+# This program built for i386-apple-darwin11.3.0
+
+# Make data base, printed on Thu May 12 22:56:15 2022
+
+# Variables
+
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# environment
+OPAM_SWITCH_PREFIX = /Users/kimdaeho/.opam/4.05.0
+# environment
+OCAML_TOPLEVEL_PATH = /Users/kimdaeho/.opam/4.05.0/lib/toplevel
+# makefile (from `Makefile', line 12)
+OBJ = set_type.cmo dict.cmo mach.cmo ast.cmo parser.cmo lexer.cmo inout.cmo ast_valid.cmo ast_print.cmo core.cmo core_print.cmo typing.cmo monomorphise.cmo mono.cmo mono_print.cmo translate.cmo test.cmo
+# environment
+VSCODE_LOG_NATIVE = false
+# makefile (from `Makefile', line 11)
+TARGET = hw7
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# environment
+OCAML_LSP_SERVER_LOG = -
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# automatic
+@F = $(notdir $@)
+# makefile
+CURDIR := /Users/kimdaeho/Desktop/PL/assn/hw7
+# makefile
+SHELL = /bin/sh
+# environment
+VSCODE_NLS_CONFIG = {"locale":"ko","availableLanguages":{"*":"ko"},"_languagePackId":"738ac08552cca045871a73764b8c446f.ko","_translationsConfigFile":"/Users/kimdaeho/Library/Application Support/Code/clp/738ac08552cca045871a73764b8c446f.ko/tcf.json","_cacheRoot":"/Users/kimdaeho/Library/Application Support/Code/clp/738ac08552cca045871a73764b8c446f.ko","_resolvedLanguagePackCoreLocation":"/Users/kimdaeho/Library/Application Support/Code/clp/738ac08552cca045871a73764b8c446f.ko/da15b6fd3ef856477bf6f4fb29ba1b7af717770d","_corruptedFile":"/Users/kimdaeho/Library/Application Support/Code/clp/738ac08552cca045871a73764b8c446f.ko/corrupted.info","_languagePackSupport":true}
+# environment
+_ = /usr/bin/make
+# makefile (from `.depend', line 1)
+MAKEFILE_LIST :=  Makefile .depend
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+PERL_MM_OPT = INSTALL_BASE=/Users/kimdaeho/perl5
+# environment
+__CFBundleIdentifier = com.microsoft.VSCode
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/18/n6vf4j1d3md4q9x8cnq7g5cm0000gn/T/vscode-ipc-2c6550cf-53e4-452e-b40c-f52b58def1ef.sock
+# environment
+VSCODE_CWD = /
+# environment
+PATH = /opt/anaconda3/bin:/opt/anaconda3/condabin:/Users/kimdaeho/.opam/4.05.0/bin:/Users/kimdaeho/perl5/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands
+# makefile (from `Makefile', line 3)
+CAMLCFLAG = -thread 
+# environment
+LSCOLORS = Gxfxcxdxbxegedabagacad
+# environment
+SDKMAN_DIR = /Users/kimdaeho/.sdkman
+# makefile (from `Makefile', line 7)
+YACCFLAGS = -v
+# environment
+SDKMAN_CANDIDATES_API = https://api.sdkman.io/2
+# environment
+SDKMAN_PLATFORM = darwinx64
+# environment
+VSCODE_LOG_STACK = false
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# default
+.FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
+# environment
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.0hSaAkbq4v/Listeners
+# automatic
+%F = $(notdir $%)
+# environment
+DISPLAY = /private/tmp/com.apple.launchd.hlE5LXdeDM/org.xquartz:0
+# environment
+CONDA_EXE = /opt/anaconda3/bin/conda
+# makefile (from `Makefile', line 6)
+CAMLYACC = ocamlyacc
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+PWD = /Users/kimdaeho/Desktop/PL/assn/hw7
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+HOME = /Users/kimdaeho
+# environment
+PERL_MB_OPT = --install_base "/Users/kimdaeho/perl5"
+# environment
+PERL_LOCAL_LIB_ROOT = /Users/kimdaeho/perl5
+# default
+MAKEFILEPATH = $(shell /usr/bin/xcode-select -print-path 2>/dev/null || echo /Developer)/Makefiles
+# environment
+PERL5LIB = /Users/kimdaeho/perl5/lib/perl5
+# environment
+VSCODE_CODE_CACHE_PATH = /Users/kimdaeho/Library/Application Support/Code/CachedData/da15b6fd3ef856477bf6f4fb29ba1b7af717770d
+# environment
+LOGNAME = kimdaeho
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# environment
+CONDA_PROMPT_MODIFIER = (base) 
+# environment
+ZSH = /Users/kimdaeho/.oh-my-zsh
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# makefile (from `Makefile', line 2)
+CAMLOPT = ocamlopt
+# environment
+OPAMNOENVNOTICE = true
+# environment
+CONDA_DEFAULT_ENV = base
+# environment
+XPC_FLAGS = 0x0
+# environment
+SDKMAN_VERSION = 5.13.0
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# environment
+SHLVL = 1
+# makefile (from `Makefile', line 4)
+CAMLDEP = ocamldep
+# environment
+LATEXWORKSHOP_DOCKER_LATEX = 
+# default
+MAKE_VERSION := 3.81
+# environment
+USER = kimdaeho
+# environment
+CAML_LD_LIBRARY_PATH = /Users/kimdaeho/.opam/4.05.0/lib/stublibs:/Users/kimdaeho/.opam/4.05.0/lib/ocaml/stublibs:/Users/kimdaeho/.opam/4.05.0/lib/ocaml
+# makefile
+.DEFAULT_GOAL := all
+# environment
+LESS = -R
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+CONDA_SHLVL = 1
+# default
+MAKE_COMMAND := /Library/Developer/CommandLineTools/usr/bin/make
+# default
+.VARIABLES := 
+# environment
+TMPDIR = /var/folders/18/n6vf4j1d3md4q9x8cnq7g5cm0000gn/T/
+# automatic
+*F = $(notdir $*)
+# environment
+VSCODE_IPC_HOOK = /Users/kimdaeho/Library/Application Support/Code/1.67.1-main.sock
+# makefile
+MAKEFLAGS = Rrqp
+# environment
+MFLAGS = -Rrqp
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.51683476.51683483
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# automatic
++F = $(notdir $+)
+# makefile (from `Makefile', line 1)
+CAMLC = ocamlc
+# environment
+__CF_USER_TEXT_ENCODING = 0x1F5:0x3:0x33
+# environment
+COMMAND_MODE = unix2003
+# default
+MAKEFILES := 
+# automatic
+<F = $(notdir $<)
+# environment
+SDKMAN_CANDIDATES_DIR = /Users/kimdaeho/.sdkman/candidates
+# environment
+PAGER = less
+# environment
+LC_ALL = C
+# environment
+CONDA_PYTHON_EXE = /opt/anaconda3/bin/python
+# automatic
+^F = $(notdir $^)
+# default
+SUFFIXES := 
+# environment
+_CE_M = 
+# makefile (from `Makefile', line 8)
+CAMLLEX = ocamllex
+# default
+.INCLUDE_DIRS = /usr/local/include
+# environment
+MAKELEVEL := 0
+# environment
+CONDA_PREFIX = /opt/anaconda3
+# environment
+VSCODE_PID = 26701
+# environment
+_CE_CONDA = 
+# makefile (from `Makefile', line 10)
+PARSER = parser.ml parser.mli lexer.ml
+# environment
+LANG = C
+# variable set hash-table stats:
+# Load=100/1024=10%, Rehash=0, Collisions=5/134=4%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (device 16777225, inode 51591872): 30 files, 2 impossibilities.
+
+# 30 files, 2 impossibilities in 1 directories.
+
+# Implicit Rules
+
+%.ml:
+
+%.cmo: %.ml
+#  commands to execute (from `Makefile', line 24):
+	$(CAMLC) $(CAMLCFLAG) -c $< -o $@
+	
+
+%.cmx: %.ml
+#  commands to execute (from `Makefile', line 26):
+	$(CAMLOPT) $(CAMLCFLAG) -c $< -o $@
+	
+
+%.mli:
+
+%.cmi: %.mli
+#  commands to execute (from `Makefile', line 28):
+	$(CAMLC) $(CAMLCFLAG) -c $< -o $@
+	
+
+%.cmo:
+
+%.cmi:
+
+%.cmx:
+
+%.mll:
+
+%.ml: %.mll
+#  commands to execute (from `Makefile', line 47):
+	$(CAMLLEX) $<
+	
+
+%.cmo: %.mll
+#  commands to execute (from `Makefile', line 30):
+	$(CAMLLEX) $<
+	$(CAMLC) -c $*.ml
+	
+
+%.cmx: %.mll
+#  commands to execute (from `Makefile', line 33):
+	$(CAMLLEX) $<
+	$(CAMLOPT) -c $*.ml
+	
+
+%.mly:
+
+%.ml: %.mly
+#  commands to execute (from `Makefile', line 49):
+	$(CAMLYACC) $<
+	
+
+%.cmo: %.mly
+#  commands to execute (from `Makefile', line 36):
+	$(CAMLYACC) $<
+	$(CAMLC) -c $*.mli
+	$(CAMLC) -c $*.ml
+	
+
+%.cmi: %.mly
+#  commands to execute (from `Makefile', line 44):
+	$(CAMLYACC) $<
+	$(CAMLC) -c $*.mli
+	
+
+%.cmx: %.mly
+#  commands to execute (from `Makefile', line 40):
+	$(CAMLYACC) $<
+	$(CAMLOPT) -c $*.mli
+	$(CAMLOPT) -c $*.ml
+	
+
+# 17 implicit rules, 0 (0.0%) terminal.
+
+# Files
+
+set_type.cmx:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+ast.cmo:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+ 
+#  File has not been updated.
+
+inout.cmx:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.mll:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+ast_valid.cmx: set_type.cmx ast.cmx
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+dict.cmx: set_type.cmx
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.mli:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+all: set_type.cmo dict.cmo mach.cmo ast.cmo parser.cmo lexer.cmo inout.cmo ast_valid.cmo ast_print.cmo core.cmo core_print.cmo typing.cmo monomorphise.cmo mono.cmo mono_print.cmo translate.cmo test.cmo hw7.cmo
+#  Command-line target.
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/4=0%
+#  commands to execute (from `Makefile', line 15):
+	$(CAMLC) -o lib.cma -a $(OBJ)
+	$(CAMLC) -o $(TARGET) lib.cma hw7.cmo 
+	
+
+# Not a target:
+.mly:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.PHONY: depend
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+mach.cmo: dict.cmo mach.cmi
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+typing_stub.cmx:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.mll.cmo:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 30):
+	$(CAMLLEX) $<
+	$(CAMLC) -c $*.ml
+	
+
+# Not a target:
+lexer.cmo:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.depend:
+#  Implicit rule search has been done.
+#  Last modified 2022-02-20 12:54:01
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+.SUFFIXES: .ml .mli .cmo .cmi .cmx .mll .mly
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.mly.ml:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 49):
+	$(CAMLYACC) $<
+	
+
+ast_print.cmo: ast.cmo
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-02-20 12:54:01
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+ast.cmx:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.mly.cmx:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 40):
+	$(CAMLYACC) $<
+	$(CAMLOPT) -c $*.mli
+	$(CAMLOPT) -c $*.ml
+	
+
+# Not a target:
+typing.cmo:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+hw7.cmo: test.cmo
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.ml:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+translate.cmo: mono.cmo mach.cmi dict.cmo
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+set_type.ml:
+#  Implicit rule search has been done.
+#  Last modified 2022-02-20 12:54:01
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+.cmx:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+monomorphise.cmo: set_type.cmo mono.cmo dict.cmo core.cmo
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+mach.cmx: dict.cmx mach.cmi
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+core.cmo: ast.cmo
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.ml.cmo:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 24):
+	$(CAMLC) $(CAMLCFLAG) -c $< -o $@
+	
+
+ast_print.cmx: ast.cmx
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+depend:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 52):
+	$(CAMLDEP) *.mli *.ml > .depend 
+	
+
+.mly.cmo:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 36):
+	$(CAMLYACC) $<
+	$(CAMLC) -c $*.mli
+	$(CAMLC) -c $*.ml
+	
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+hw7.cmx: test.cmx
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+translate.cmx: mono.cmx mach.cmx dict.cmx
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.mly.cmi:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 44):
+	$(CAMLYACC) $<
+	$(CAMLC) -c $*.mli
+	
+
+mono.cmx: ast.cmx
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.cmo:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+test.cmo: translate.cmo monomorphise.cmo mono_print.cmo mono.cmo mach.cmi inout.cmo core_print.cmo ast_valid.cmo ast_print.cmo
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 19):
+	ls $(TARGET) $(PARSER) *.cm[ioxa] | grep -v typing | xargs rm -f 
+	
+
+mach.cmi:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+monomorphise.cmx: set_type.cmx mono.cmx dict.cmx core.cmx
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+core_print.cmo: core.cmo
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+mono_print.cmo: mono.cmo
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+core.cmx: ast.cmx
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.ml.cmx:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 26):
+	$(CAMLOPT) $(CAMLCFLAG) -c $< -o $@
+	
+
+# Not a target:
+.cmi:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+set_type.cmo: set_type.ml
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `set_type'
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := set_type.cmo
+# automatic
+ 
+# % := 
+# automatic
+# * := set_type
+# automatic
+# + := set_type.ml
+# automatic
+# | := 
+# automatic
+# < := set_type.ml
+# automatic
+# ^ := set_type.ml
+# automatic
+# ? := set_type.ml
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=2/14=14%
+#  commands to execute (from `Makefile', line 24):
+	$(CAMLC) $(CAMLCFLAG) -c $< -o $@
+	
+
+inout.cmo:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+ast_valid.cmo: set_type.cmo ast.cmo
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+dict.cmo: set_type.cmo
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+mono.cmo: ast.cmo
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.mll.ml:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 47):
+	$(CAMLLEX) $<
+	
+
+test.cmx: translate.cmx monomorphise.cmx mono_print.cmx mono.cmx mach.cmx inout.cmx core_print.cmx ast_valid.cmx ast_print.cmx
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+parser.cmo:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+typing_stub.cmo:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.mli.cmi:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 28):
+	$(CAMLC) $(CAMLCFLAG) -c $< -o $@
+	
+
+core_print.cmx: core.cmx
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+mono_print.cmx: mono.cmx
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.mll.cmx:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 33):
+	$(CAMLLEX) $<
+	$(CAMLOPT) -c $*.ml
+	
+
+# files hash-table stats:
+# Load=62/1024=6%, Rehash=0, Collisions=60/206=29%
+# VPATH Search Paths
+
+# No `vpath' search paths.
+
+# No general (`VPATH' variable) search path.
+
+# # of strings in strcache: 2
+# # of strcache buffers: 1
+# strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
+# strcache free: total = 4079 / max = 4079 / min = 4079 / avg = 4079
+
+# Finished Make data base on Thu May 12 22:56:15 2022
+
+ 
