@@ -125,7 +125,7 @@ let rec pat2code saddr faddr l pat =
         match v with
           REFADDR _ | REFREG _ -> 
             let _ = incc_cnt 1 in
-            code @@ [DEBUG "P_PAIR_PUSH"] @@ [PUSH v], L_DREF (L_REG sp, -1)
+            code @@ [PUSH v], L_DREF (L_REG sp, -1)
         | _ -> code, l in
       let code1, venv1 = patty2code saddr faddr (L_DREF (l, 0)) patty1 in
       let code2, venv2 = patty2code saddr faddr (L_DREF (l, 1)) patty2 in
@@ -158,7 +158,7 @@ let rec exp2code env saddr e =
         let con_lb = con_label avid in
         let _ = incc_cnt 1 in
         prepare_code := !prepare_code @@ [LABEL con_lb] @@ [RETURN];
-        [DEBUG "CONN_PUSH"] @@ [MALLOC (LREG cp, INT 1)]
+        [MALLOC (LREG cp, INT 1)]
           @@ [MOVE (LREFREG (cp, 0), ADDR (CADDR con_lb))]
           @@ [PUSH (REG cp)], REFREG (sp, -1)
     | CONF -> 
@@ -166,7 +166,7 @@ let rec exp2code env saddr e =
         let con_lb = con_label avid in
         let _ = incc_cnt 1 in
         prepare_code := !prepare_code @@ [LABEL con_lb] @@ [RETURN];
-        [DEBUG "CONF_PUSH"] @@ [MALLOC (LREG cp, INT 2)]
+        [MALLOC (LREG cp, INT 2)]
           @@ [MOVE (LREFREG (cp, 0), ADDR (CADDR con_lb))]
           @@ [MALLOC (LREFREG (cp, 1), INT 2)]
           @@ [PUSH (REG cp)], REFREG (sp, -1))
@@ -176,7 +176,7 @@ let rec exp2code env saddr e =
       let fun_lb = fun_label () in
       prepare_code := !prepare_code @@ [LABEL fun_lb] @@ code;
       pop_cnt := !pop_cnt + 1;
-      [DEBUG "FUN"] @@ [MALLOC (LREG tr, INT 2)]
+      [MALLOC (LREG tr, INT 2)]
           @@ [MOVE (LREFREG (tr, 0), ADDR (CADDR fun_lb))]
           @@ [PUSH (REG tr)], REFREG (sp, -1)
   | E_APP (expty1, expty2) ->
@@ -204,13 +204,13 @@ let rec exp2code env saddr e =
           let code2, v2 = expty2code (update_env env) (labelNew ()) expty2' in
           let v1 = update_rvalue v1 in
           let _ = incc_cnt 1 in
-          [DEBUG "APP_ARITH"] @@ code1 @@ code2 @@ f v1 v2, REFREG (sp, -1)
+          code1 @@ code2 @@ f v1 v2, REFREG (sp, -1)
       | _ -> 
           let code1, v1 = expty2code env (labelNew ()) expty1 in
           let code2, v2 = expty2code (update_env env) (labelNew ()) expty2 in
           let v1 = update_rvalue v1 in
           let _ = incc_cnt 1 in
-          [DEBUG "APP"] @@ code1 @@ code2
+          code1 @@ code2
               @@ [MOVE (LREG tr, v1)]
               @@ [MOVE (LREFREG (tr, 1), v2)]
               @@ [CALL (REFREG (tr, 0))]
@@ -221,7 +221,7 @@ let rec exp2code env saddr e =
       let _ = incc_cnt 1 in
       let v1 = update_rvalue v1 in
       heap_cnt := !heap_cnt + 1;
-      [DEBUG "PAIR"] @@ code1 @@ code2 @@ [MALLOC (LREG r29, INT 2)] 
+      code1 @@ code2 @@ [MALLOC (LREG r29, INT 2)] 
           @@ [MOVE (LREFREG (r29, 0), v1)] 
           @@ [MOVE (LREFREG (r29, 1), v2)] 
           @@ [PUSH (REG r29)], REFREG (sp, -1) 
@@ -245,7 +245,7 @@ and dec2code env saddr dec =
       let pattyCode, pattyVenv = patty2code (labelNew ()) failure_label (L_DREF (L_REG sp, 0)) patty in 
       let _ = incc_cnt 1 in
       let newVenv = update_venv (Dict.merge venv pattyVenv) in
-      [DEBUG "VAL"] @@ etCode @@ [PUSH v] @@ pattyCode, (newVenv, cnt)
+      etCode @@ [PUSH v] @@ pattyCode, (newVenv, cnt)
   | D_REC (patty, et) -> 
       (match patty, et with
         PATTY (P_VID (avid, VAR), _), EXPTY (E_FUN _, _) -> 
@@ -254,7 +254,7 @@ and dec2code env saddr dec =
           let pattyCode, pattyVenv = patty2code (labelNew ()) failure_label (L_DREF (L_REG sp, 0)) patty in 
           push_cnt := !push_cnt - 1;
           let newEnv = update_venv (Dict.merge venv pattyVenv) in
-          [DEBUG "REC"] @@ etCode @@ pattyCode, (newEnv, cnt)
+          etCode @@ pattyCode, (newEnv, cnt)
       | _ -> raise NotMatched)
   | D_DTYPE -> code0, env
 
@@ -288,13 +288,12 @@ and mrule2code env saddr faddr mrule =
 
 (* mrule2code : env -> Mach.label -> Mach.label -> Mono.mrule list -> Mach.code *)
 and mlist2code env saddr faddr mlist = 
-    [DEBUG "MLIST"] 
-        @@ (match mlist with
-              [] -> code0
-            | h::t ->
-                let lb = temp_label () in
-                let code = mrule2code env saddr lb h in
-                code @@ mlist2code env lb faddr t)
+    match mlist with
+      [] -> code0
+    | h::t ->
+        let lb = temp_label () in
+        let code = mrule2code env saddr lb h in
+        code @@ mlist2code env lb faddr t
 
 (* program2code : Mono.program -> Mach.code *)
 let program2code (dlist, et) = 
