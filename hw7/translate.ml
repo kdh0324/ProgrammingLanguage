@@ -175,7 +175,7 @@ let rec exp2code env saddr e =
       let code = mlist2code env (labelNew ()) failure_label mlist in
       let fun_lb = fun_label () in
       prepare_code := !prepare_code @@ [LABEL fun_lb] @@ code;
-      pop_cnt := !pop_cnt + 1;
+      let _ = incc_cnt 1 in
       [MALLOC (LREG tr, INT 2)]
           @@ [MOVE (LREFREG (tr, 0), ADDR (CADDR fun_lb))]
           @@ [PUSH (REG tr)], REFREG (sp, -1)
@@ -283,6 +283,7 @@ and mrule2code env saddr faddr mrule =
       if i = 0 then code0
       else [POP (LREG r29)] @@ helper (i - 1) in
     helper !pop_cnt in
+  push_cnt := !push_cnt - !pop_cnt;
   pop_cnt := temp;
   [LABEL saddr] @@ pattyCode @@ etCode @@ [MOVE (LREG tr, v)] @@ pop_code @@ [RETURN]
 

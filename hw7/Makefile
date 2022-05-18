@@ -16,7 +16,8 @@ all: $(OBJ) hw7.cmo
 	$(CAMLC) -o $(TARGET) lib.cma hw7.cmo 
 	
 clean:
-	ls $(TARGET) $(PARSER) *.cm[ioxa] | grep -v typing | xargs rm -f 
+	ls $(TARGET) $(PARSER) *.cm[ioxa] | grep -v typing | xargs rm -f
+	rm example/*.exe 
 
 .SUFFIXES : .ml .mli .cmo .cmi .cmx .mll .mly 
 
