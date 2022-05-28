@@ -1,0 +1,5 @@
+datatype list = Nil | Cons of (int * list);
+
+val l = Cons (1, Nil);
+
+l;;
